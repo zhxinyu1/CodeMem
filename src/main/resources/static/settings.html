@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>码忆 · API Key</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+        body {
+            margin: 0;
+            background: #f5f7fa;
+        }
+        /* 顶部导航：与主界面（web/src/style.css 的 .nav）保持同一套结构与视觉 */
+        .topnav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            height: 52px;
+            padding: 0 16px;
+            background: #ffffff;
+            border-bottom: 1px solid #e4e7ed;
+        }
+        .brand {
+            font-weight: 700;
+            font-size: 16px;
+            color: #2b6cb0;
+        }
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 10px;
+        }
+        .nav-item {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #4b5563;
+            text-decoration: none;
+            line-height: 20px;
+            transition: background 0.15s, color 0.15s;
+        }
+        .nav-item:hover {
+            background: #f0f6ff;
+            color: #2563eb;
+        }
+        .nav-item.active {
+            background: #ecf5ff;
+            color: #2563eb;
+            font-weight: 600;
+        }
+        .page {
+            max-width: 760px;
+            margin: 32px auto 64px;
+            padding: 0 20px;
+        }
+        .card {
+            background: #ffffff;
+            border: 1px solid #e3e9f2;
+            border-radius: 14px;
+            padding: 28px;
+            box-shadow: 0 8px 24px rgba(23, 32, 51, 0.06);
+            margin-bottom: 22px;
+        }
+        h1 {
+            margin: 0 0 8px;
+            font-size: 24px;
+        }
+        h2 {
+            margin: 26px 0 10px;
+            font-size: 16px;
+            color: #344054;
+        }
+        .sub {
+            color: #667085;
+            margin: 0 0 22px;
+            line-height: 1.6;
+        }
+        .meta {
+            background: #f8fafc;
+            border: 1px solid #eef2f7;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            line-height: 1.9;
+            word-break: break-all;
+        }
+        .meta b {
+            color: #344054;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin: 14px 0 8px;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px 13px;
+            border: 1px solid #cfd8e3;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+            background: #ffffff;
+            color: #172033;
+        }
+        input:focus, select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+        .path-row {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+        }
+        .path-row input {
+            flex: 1;
+            min-width: 0;
+        }
+        .path-row button {
+            flex: none;
+            white-space: nowrap;
+        }
+        .row {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        button {
+            border: 0;
+            border-radius: 9px;
+            padding: 10px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            background: #2563eb;
+            color: #ffffff;
+        }
+        button.secondary {
+            background: #e8eef8;
+            color: #1d4ed8;
+        }
+        button.danger {
+            background: #fee4e2;
+            color: #b42318;
+        }
+        button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 16px;
+            min-height: 22px;
+            font-size: 14px;
+            line-height: 1.6;
+            word-break: break-all;
+        }
+        .ok { color: #067647; }
+        .warn { color: #b54708; }
+        .err { color: #b42318; }
+.note {
+            margin-top: 18px;
+            color: #667085;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        /* 对话模式：自定义分段按钮，隐藏原生 radio，避免默认圆点样式与卡片风格不搭 */
+        .mode-switch {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .mode-option {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            margin: 0;
+            font-weight: normal;
+        }
+        .mode-option input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+        .mode-option span {
+            display: inline-block;
+            padding: 9px 16px;
+            border: 1px solid #cfd8e3;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #344054;
+            font-size: 14px;
+            line-height: 20px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: border-color .15s, background .15s, color .15s;
+        }
+        .mode-option:hover span {
+            border-color: #2563eb;
+        }
+        .mode-option input:checked + span {
+            border-color: #2563eb;
+            background: #ecf5ff;
+            color: #1d4ed8;
+            font-weight: 600;
+        }
+        code {
+            background: #f2f4f7;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        .sources {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .source {
+            border: 1px solid #e3e9f2;
+            border-radius: 10px;
+            padding: 12px 14px;
+            background: #fcfdff;
+        }
+        .source.active {
+            border-color: #b3d8ff;
+            background: #f5faff;
+        }
+        .source-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .source-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .tag {
+            font-size: 12px;
+            padding: 1px 7px;
+            border-radius: 999px;
+            background: #e8eef8;
+            color: #1d4ed8;
+        }
+        .tag.inuse {
+            background: #dcfae6;
+            color: #067647;
+        }
+        .source-path {
+            font-size: 12px;
+            color: #667085;
+            margin-top: 6px;
+            word-break: break-all;
+        }
+        .source-meta {
+            font-size: 12px;
+            color: #98a2b3;
+            margin-top: 4px;
+        }
+        .source-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .source-actions button {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+        .empty {
+            color: #98a2b3;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+<header class="topnav">
+    <div class="brand">码忆 CodeMem</div>
+    <nav class="nav">
+        <a class="nav-item" href="/web/">对话</a>
+        <a class="nav-item" href="/memory.html">记忆库</a>
+        <a class="nav-item" href="/instructions.html">指令</a>
+        <a class="nav-item active" href="/settings.html">API Key</a>
+        <a class="nav-item" href="/help.html">帮助</a>
+    </nav>
+</header>
+
+<main class="page">
+<div class="card">
+    <h1>对话模式</h1>
+    <p class="sub">Mock 用模板回答；真实模型走下面的 Base URL 与模型配置，需要有效 Key。切换立即生效，不用重启。</p>
+    <div class="mode-switch">
+        <label class="mode-option">
+            <input type="radio" name="chatMode" value="mock">
+            <span>Mock（模板回答）</span>
+        </label>
+        <label class="mode-option">
+            <input type="radio" name="chatMode" value="real">
+            <span>真实模型</span>
+        </label>
+        <button id="saveModeBtn" type="button">应用</button>
+    </div>
+    <div id="modeStatus" class="status"></div>
+    <p class="note">选真实模型前，确认 Base URL、模型名和 Key 都可用；否则对话会直接报错。</p>
+</div>
+
+<div class="card">
+    <h1>API Key</h1>
+    <p class="sub">密钥只保存在当前应用进程内存中，不落盘、不回显；应用重启后需要重新输入。Base URL 与模型可在此修改，保存后立即生效；环境变量仍可作为启动兜底。</p>
+
+    <label for="baseUrlInput">Base URL</label>
+    <input id="baseUrlInput" type="text" maxlength="300" autocomplete="off" spellcheck="false" placeholder="https://api.openai.com/v1">
+    <p class="note">填写服务商提供的兼容接口地址，需以 <code>http://</code> 或 <code>https://</code> 开头；带不带末尾斜杠都可以。</p>
+
+    <label for="modelInput">Embedding 模型</label>
+    <input id="modelInput" type="text" maxlength="120" autocomplete="off" spellcheck="false" placeholder="text-embedding-3-small">
+
+    <div class="meta">
+        <div><b>向量维度：</b><span id="dimensions">-</span></div>
+        <div><b>Key 状态：</b><span id="keyState">-</span></div>
+    </div>
+
+    <label for="apiKey">API Key（只改地址或模型时可留空）</label>
+    <input id="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="sk-...">
+    <div class="row">
+        <button id="saveBtn" type="button">保存配置</button>
+        <button id="testBtn" class="secondary" type="button">测试连接</button>
+        <button id="saveAndReindexBtn" class="secondary" type="button">保存并重建索引</button>
+    </div>
+    <div id="status" class="status"></div>
+
+<p class="note">切换 embedding 服务或模型后索引签名会变化，需要重建索引。使用 <code>EMBEDDING_PROVIDER=hash</code> 时不需要 Key。</p>
+</div>
+
+</main>
+
+<script>
+    const apiKeyInput = document.getElementById('apiKey');
+    const baseUrlInput = document.getElementById('baseUrlInput');
+    const modelInput = document.getElementById('modelInput');
+    const saveBtn = document.getElementById('saveBtn');
+    const testBtn = document.getElementById('testBtn');
+    const saveAndReindexBtn = document.getElementById('saveAndReindexBtn');
+    const statusEl = document.getElementById('status');
+
+    function setStatus(text, kind) {
+        statusEl.textContent = text;
+        statusEl.className = 'status ' + (kind || '');
+    }
+
+    async function reindex() {
+        setStatus('正在重建索引，请稍候...', 'warn');
+        try {
+            const response = await fetch('/api/v1/knowledge/reindex', {method: 'POST'});
+            const data = await response.json();
+            if (!response.ok) {
+                setStatus('重建失败：' + (data.message || 'HTTP ' + response.status), 'err');
+                return;
+            }
+            if (!data.indexedNotes && !data.failedNotes && data.failureReason) {
+                setStatus('重建失败：' + data.failureReason, 'err');
+            } else {
+                setStatus(`索引完成：扫描 ${data.scannedNotes} 篇，成功 ${data.indexedNotes} 篇，跳过 ${data.skippedNotes} 篇，${data.chunks} 个块，耗时 ${data.durationMs} ms。`, 'ok');
+            }
+        } catch (error) {
+            setStatus('重建请求失败：' + error.message, 'err');
+        }
+    }
+
+    async function loadSettings() {
+        const response = await fetch('/api/v1/settings/embedding');
+        if (!response.ok) {
+            setStatus('读取设置失败：HTTP ' + response.status, 'err');
+            return;
+        }
+        const data = await response.json();
+        if (document.activeElement !== baseUrlInput) {
+            baseUrlInput.value = data.baseUrl || '';
+        }
+        if (document.activeElement !== modelInput) {
+            modelInput.value = data.model || '';
+        }
+        document.getElementById('dimensions').textContent = data.dimensions || '-';
+        const state = document.getElementById('keyState');
+        state.textContent = data.keyConfigured ? '已配置' : '未配置';
+        state.className = data.keyConfigured ? 'ok' : 'warn';
+    }
+
+    function validateBaseUrl(value) {
+        if (!value) {
+            return '请填写 Base URL。';
+        }
+        if (value.length > 300) {
+            return 'Base URL 不能超过 300 个字符。';
+        }
+        if (/\s/.test(value)) {
+            return 'Base URL 不能包含空格。';
+        }
+        let parsed;
+        try {
+            parsed = new URL(value);
+        } catch (error) {
+            return 'Base URL 格式不正确，示例：https://api.openai.com/v1';
+        }
+        if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+            return 'Base URL 只支持 http:// 或 https://。';
+        }
+        if (!parsed.hostname) {
+            return 'Base URL 缺少主机名。';
+        }
+        return '';
+    }
+
+    function validateModel(value) {
+        if (!value) {
+            return '请填写 Embedding 模型名。';
+        }
+        if (value.length > 120) {
+            return '模型名不能超过 120 个字符。';
+        }
+        if (/\s/.test(value)) {
+            return '模型名不能包含空格。';
+        }
+        return '';
+    }
+
+    async function saveSettings() {
+        const apiKey = apiKeyInput.value.trim();
+        const baseUrl = baseUrlInput.value.trim();
+        const model = modelInput.value.trim();
+        const invalid = validateBaseUrl(baseUrl) || validateModel(model);
+        if (invalid) {
+            setStatus(invalid, 'err');
+            return false;
+        }
+        if (apiKey.length > 500) {
+            setStatus('API Key 不能超过 500 个字符。', 'err');
+            return false;
+        }
+        saveBtn.disabled = true;
+        try {
+            const payload = {baseUrl, model};
+            if (apiKey) {
+                payload.apiKey = apiKey;
+            }
+            const response = await fetch('/api/v1/settings/embedding', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                const text = await response.text();
+                setStatus('保存失败：HTTP ' + response.status + ' ' + text, 'err');
+                return false;
+            }
+            apiKeyInput.value = '';
+            await loadSettings();
+            setStatus('配置已保存到当前进程内存，可直接重建索引。', 'ok');
+            return true;
+        } finally {
+            saveBtn.disabled = false;
+        }
+    }
+
+    async function testConnection() {
+        testBtn.disabled = true;
+        setStatus('正在测试连接，最多等待十几秒...', 'warn');
+        try {
+            const response = await fetch('/api/v1/settings/embedding/test', {method: 'POST'});
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                setStatus('测试失败：HTTP ' + response.status, 'err');
+                return;
+            }
+            if (data.ok) {
+                setStatus(`连接成功，耗时 ${data.latencyMs} ms。签名：${data.signature || '-'}`, 'ok');
+            } else {
+                setStatus(`连接失败（${data.latencyMs} ms）：${data.message || '未知原因'}`, 'err');
+            }
+        } catch (error) {
+            setStatus('测试请求失败：' + error.message, 'err');
+        } finally {
+            testBtn.disabled = false;
+        }
+    }
+
+    async function saveAndReindex() {
+        const saved = await saveSettings();
+        if (!saved) {
+            return;
+        }
+        saveAndReindexBtn.disabled = true;
+        try {
+            await reindex();
+        } finally {
+            saveAndReindexBtn.disabled = false;
+        }
+    }
+
+saveBtn.addEventListener('click', saveSettings);
+    testBtn.addEventListener('click', testConnection);
+    saveAndReindexBtn.addEventListener('click', saveAndReindex);
+    document.getElementById('saveModeBtn').addEventListener('click', saveChatMode);
+
+    loadSettings().catch(error => setStatus('初始化失败：' + error.message, 'err'));
+    loadChatMode();
+
+    function setModeStatus(text, kind) {
+        const el = document.getElementById('modeStatus');
+        el.textContent = text || '';
+        el.className = 'status ' + (kind || '');
+    }
+
+    function selectedMode() {
+        const checked = document.querySelector('input[name="chatMode"]:checked');
+        return checked ? checked.value : null;
+    }
+
+    function applyModeToInputs(mock) {
+        document.querySelectorAll('input[name="chatMode"]').forEach(input => {
+            input.checked = input.value === (mock ? 'mock' : 'real');
+        });
+    }
+
+    async function loadChatMode() {
+        try {
+            const response = await fetch('/api/v1/settings/chat-mode');
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                setModeStatus('读取对话模式失败：HTTP ' + response.status, 'err');
+                return;
+            }
+            applyModeToInputs(Boolean(data.mock));
+            setModeStatus(`当前：${data.mock ? 'Mock（模板回答）' : '真实模型'}`, 'ok');
+        } catch (error) {
+            setModeStatus('读取对话模式失败：' + error.message, 'err');
+        }
+    }
+
+    async function saveChatMode() {
+        const value = selectedMode();
+        if (!value) {
+            setModeStatus('请先选择一种模式。', 'warn');
+            return;
+        }
+        const btn = document.getElementById('saveModeBtn');
+        btn.disabled = true;
+        setModeStatus('正在切换…', 'warn');
+        try {
+            const response = await fetch('/api/v1/settings/chat-mode', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({mock: value === 'mock'})
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.ok) {
+                setModeStatus('切换失败：' + (data.reason || 'HTTP ' + response.status), 'err');
+                return;
+            }
+            applyModeToInputs(Boolean(data.mock));
+            setModeStatus(`已切换为${data.mock ? 'Mock（模板回答）' : '真实模型'}，下一轮对话生效。`, 'ok');
+        } catch (error) {
+            setModeStatus('切换失败：' + error.message, 'err');
+        } finally {
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>

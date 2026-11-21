@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>码忆 · 全局指令</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+        body { margin: 0; background: #f5f7fa; }
+        .topnav {
+            display: flex; align-items: center; gap: 12px; height: 52px; padding: 0 16px;
+            background: #fff; border-bottom: 1px solid #e4e7ed;
+        }
+        .brand { font-weight: 700; font-size: 16px; color: #2b6cb0; }
+        .nav { display: flex; align-items: center; gap: 4px; }
+        .nav-item {
+            padding: 6px 14px; border-radius: 8px; font-size: 14px; color: #4b5563;
+            text-decoration: none; line-height: 20px; transition: background .15s, color .15s;
+        }
+        .nav-item:hover { background: #f0f6ff; color: #2563eb; }
+        .nav-item.active { background: #ecf5ff; color: #2563eb; font-weight: 600; }
+        .page { max-width: 900px; margin: 32px auto 64px; padding: 0 20px; }
+        .card {
+            background: #fff; border: 1px solid #e3e9f2; border-radius: 14px; padding: 26px;
+            box-shadow: 0 8px 24px rgba(23, 32, 51, .06);
+        }
+        h1 { margin: 0 0 8px; font-size: 24px; }
+        h2 { margin: 22px 0 10px; font-size: 16px; color: #344054; }
+        .sub { color: #667085; margin: 0 0 18px; line-height: 1.7; font-size: 14px; }
+        .filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 16px; }
+        label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #344054; }
+        input, textarea {
+            box-sizing: border-box; padding: 9px 12px; border: 1px solid #cfd8e3; border-radius: 9px;
+            font-size: 14px; outline: none; background: #fff; color: #172033; font-family: inherit;
+        }
+        textarea { width: 100%; resize: vertical; min-height: 64px; line-height: 1.6; }
+        input:focus, textarea:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, .12); }
+        .field { flex: 1 1 150px; }
+        .field input { width: 100%; }
+        button {
+            border: 0; border-radius: 9px; padding: 9px 16px; font-size: 14px; cursor: pointer;
+            background: #2563eb; color: #fff;
+        }
+        button.secondary { background: #e8eef8; color: #1d4ed8; }
+        button.danger { background: #fee4e2; color: #b42318; }
+        button:disabled { opacity: .55; cursor: not-allowed; }
+        .status { margin-top: 6px; min-height: 20px; font-size: 13px; line-height: 1.6; }
+        .ok { color: #067647; } .warn { color: #b54708; } .err { color: #b42318; }
+        .instr {
+            border: 1px solid #e3e9f2; border-radius: 12px; padding: 14px 16px; background: #fcfdff;
+            margin-bottom: 12px;
+        }
+        .instr-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+        .seq {
+            width: 22px; height: 22px; border-radius: 50%; background: #ecf5ff; color: #2563eb;
+            font-size: 12px; display: flex; align-items: center; justify-content: center; font-weight: 600;
+        }
+        .tag { font-size: 12px; padding: 1px 8px; border-radius: 999px; background: #e8eef8; color: #1d4ed8; }
+        .tag.on { background: #dcfae6; color: #067647; }
+        .content { font-size: 15px; line-height: 1.7; white-space: pre-wrap; word-break: break-word; color: #1d2939; }
+        .actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .actions button { padding: 6px 12px; font-size: 13px; }
+        .preview {
+            background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 14px 16px;
+            font-size: 13px; line-height: 1.7; white-space: pre-wrap; word-break: break-word;
+            max-height: 260px; overflow: auto;
+        }
+        .empty {
+            border: 1px dashed #d0d8e4; border-radius: 12px; padding: 30px 20px; text-align: center;
+            color: #667085; line-height: 1.8; font-size: 14px;
+        }
+        .empty b { display: block; color: #344054; margin-bottom: 6px; font-size: 15px; }
+        .note { margin-top: 14px; color: #667085; font-size: 13px; line-height: 1.7; }
+        code { background: #f2f4f7; padding: 2px 5px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<header class="topnav">
+    <div class="brand">码忆 CodeMem</div>
+    <nav class="nav">
+        <a class="nav-item" href="/web/">对话</a>
+        <a class="nav-item" href="/memory.html">记忆库</a>
+        <a class="nav-item active" href="/instructions.html">指令</a>
+        <a class="nav-item" href="/settings.html">API Key</a>
+        <a class="nav-item" href="/help.html">帮助</a>
+    </nav>
+</header>
+
+<main class="page">
+    <div class="card">
+        <h1>全局指令</h1>
+        <p class="sub">
+            这里只有你自己写的东西。每条生效指令会在每轮回答前按添加顺序注入 Prompt 前提位置，
+            与知识库资料冲突时以指令为准。系统不会自动往这里写任何内容。
+        </p>
+
+        <div class="filters">
+            <div><button id="refreshBtn" type="button" class="secondary">刷新</button></div>
+        </div>
+
+        <h2>新增指令</h2>
+        <textarea id="newContent" placeholder="例如：回答一律先给结论，再给步骤；代码必须完整可运行；不确定时先说明不确定，不要猜。"></textarea>
+        <div class="filters" style="margin-top: 10px">
+            <div><button id="createBtn" type="button">新增指令</button></div>
+        </div>
+        <div id="status" class="status"></div>
+
+        <h2>生效中的指令</h2>
+        <div id="instrList"></div>
+
+        <h2>注入预览</h2>
+        <p class="sub" style="margin-bottom: 10px">这就是本轮对话会发给模型的指令块，顺序与上面一致。</p>
+        <div id="preview" class="preview">（加载中）</div>
+    </div>
+</main>
+
+<script>
+    const statusEl = document.getElementById('status');
+    const instrList = document.getElementById('instrList');
+    const previewEl = document.getElementById('preview');
+
+    const API = '/api/v1/memory/items';
+    let instructions = [];
+
+    function setStatus(text, kind) {
+        statusEl.textContent = text || '';
+        statusEl.className = 'status ' + (kind || '');
+    }
+
+    function partition() {
+        return {
+            learnerId: 'wf-user',
+            projectId: 'java-backend'
+        };
+    }
+
+    function q() {
+        const p = partition();
+        return `learnerId=${encodeURIComponent(p.learnerId)}&projectId=${encodeURIComponent(p.projectId)}`;
+    }
+
+    async function load() {
+        setStatus('加载中…', 'warn');
+        try {
+            const [listRes, previewRes] = await Promise.all([
+                fetch(`${API}/instructions?${q()}`),
+                fetch(`${API}/instructions/preview?${q()}`)
+            ]);
+            if (!listRes.ok) {
+                setStatus('读取指令失败：HTTP ' + listRes.status, 'err');
+                return;
+            }
+            instructions = await listRes.json();
+            const preview = previewRes.ok ? await previewRes.json() : {block: '（预览不可用）'};
+            renderInstructions();
+            previewEl.textContent = preview.block || '（没有生效指令）';
+            setStatus(instructions.length ? `生效指令 ${instructions.length} 条` : '还没有指令，新增一条后每轮回答都会遵守', 'ok');
+        } catch (error) {
+            setStatus('加载失败：' + error.message, 'err');
+        }
+    }
+
+    function renderInstructions() {
+        instrList.innerHTML = '';
+        if (!instructions.length) {
+            const empty = document.createElement('div');
+            empty.className = 'empty';
+            empty.innerHTML = '<b>还没有全局指令</b>在上面写一条，之后每次回答都会先遵守它。';
+            instrList.appendChild(empty);
+            return;
+        }
+        instructions.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'instr';
+
+            const head = document.createElement('div');
+            head.className = 'instr-head';
+            const seq = document.createElement('span');
+            seq.className = 'seq';
+            seq.textContent = String(index + 1);
+            head.appendChild(seq);
+            const stateTag = document.createElement('span');
+            stateTag.className = 'tag on';
+            stateTag.textContent = '生效';
+            head.appendChild(stateTag);
+            card.appendChild(head);
+
+            const content = document.createElement('div');
+            content.className = 'content';
+            content.textContent = item.content;
+            card.appendChild(content);
+
+            const actions = document.createElement('div');
+            actions.className = 'actions';
+            actions.appendChild(button('编辑', 'secondary', () => editInstruction(item)));
+            actions.appendChild(button('停用', 'secondary', () => update(item.id, {active: false})));
+            actions.appendChild(button('删除', 'danger', () => removeItem(item)));
+            card.appendChild(actions);
+
+            instrList.appendChild(card);
+        });
+    }
+
+    function button(text, kind, handler) {
+        const el = document.createElement('button');
+        el.type = 'button';
+        el.className = kind;
+        el.textContent = text;
+        el.addEventListener('click', handler);
+        return el;
+    }
+
+    async function createInstruction() {
+        const content = document.getElementById('newContent').value.trim();
+        if (!content) {
+            setStatus('指令内容不能为空。', 'warn');
+            return;
+        }
+        try {
+            const response = await fetch(`${API}/instructions?${q()}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({content})
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                setStatus('新增失败：' + (data.reason || 'HTTP ' + response.status), 'err');
+                return;
+            }
+            document.getElementById('newContent').value = '';
+            setStatus('已新增，下一轮回答开始生效。', 'ok');
+            await load();
+        } catch (error) {
+            setStatus('新增失败：' + error.message, 'err');
+        }
+    }
+
+    async function update(id, patch) {
+        try {
+            const response = await fetch(`${API}/instructions/${id}?${q()}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(patch)
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                setStatus('更新失败：' + (data.reason || 'HTTP ' + response.status), 'err');
+                return false;
+            }
+            await load();
+            return true;
+        } catch (error) {
+            setStatus('更新失败：' + error.message, 'err');
+            return false;
+        }
+    }
+
+    async function editInstruction(item) {
+        const next = prompt('修改指令内容（Enter 保存）', item.content);
+        if (next === null) return;
+        const text = next.trim();
+        if (!text) {
+            setStatus('内容不能为空。', 'warn');
+            return;
+        }
+        if (await update(item.id, {content: text})) {
+            setStatus('已保存。', 'ok');
+        }
+    }
+
+    async function removeItem(item) {
+        if (!confirm('删除这条指令？\n\n' + String(item.content).slice(0, 80) + '\n\n删除后无法恢复。')) {
+            return;
+        }
+        try {
+            const response = await fetch(`${API}/${item.id}?${q()}`, {method: 'DELETE'});
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                setStatus('删除失败：' + (data.reason || 'HTTP ' + response.status), 'err');
+                return;
+            }
+            setStatus('已删除。', 'ok');
+            await load();
+        } catch (error) {
+            setStatus('删除失败：' + error.message, 'err');
+        }
+    }
+
+    document.getElementById('createBtn').addEventListener('click', createInstruction);
+    document.getElementById('refreshBtn').addEventListener('click', load);
+
+    load().catch(error => setStatus('初始化失败：' + error.message, 'err'));
+</script>
+</body>
+</html>

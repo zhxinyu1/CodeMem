@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>码忆 · 帮助</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+        body {
+            margin: 0;
+            background: #f5f7fa;
+        }
+        .topnav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            height: 52px;
+            padding: 0 16px;
+            background: #ffffff;
+            border-bottom: 1px solid #e4e7ed;
+        }
+        .brand {
+            font-weight: 700;
+            font-size: 16px;
+            color: #2b6cb0;
+        }
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 10px;
+        }
+        .nav-item {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #4b5563;
+            text-decoration: none;
+            line-height: 20px;
+            transition: background 0.15s, color 0.15s;
+        }
+        .nav-item:hover {
+            background: #f0f6ff;
+            color: #2563eb;
+        }
+        .nav-item.active {
+            background: #ecf5ff;
+            color: #2563eb;
+            font-weight: 600;
+        }
+        .page {
+            max-width: 880px;
+            margin: 32px auto 64px;
+            padding: 0 20px;
+        }
+        .hero {
+            background: linear-gradient(135deg, #eef5ff 0%, #ffffff 60%);
+            border: 1px solid #dbe7f6;
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 22px;
+        }
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 26px;
+        }
+        .hero p {
+            margin: 0;
+            color: #667085;
+            line-height: 1.8;
+        }
+        .card {
+            background: #ffffff;
+            border: 1px solid #e3e9f2;
+            border-radius: 14px;
+            padding: 26px 28px;
+            box-shadow: 0 8px 24px rgba(23, 32, 51, 0.06);
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin: 0 0 14px;
+            font-size: 18px;
+            color: #1f2a44;
+        }
+        h3 {
+            margin: 18px 0 8px;
+            font-size: 15px;
+            color: #344054;
+        }
+        p, li {
+            line-height: 1.8;
+            color: #475467;
+            font-size: 14px;
+        }
+        ul, ol {
+            margin: 8px 0;
+            padding-left: 22px;
+        }
+        ol.steps li {
+            margin-bottom: 8px;
+        }
+        code {
+            background: #f2f5fa;
+            border: 1px solid #e4e9f2;
+            border-radius: 5px;
+            padding: 1px 6px;
+            font-size: 13px;
+            color: #1d4ed8;
+            word-break: break-all;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 10px 0 4px;
+        }
+        th, td {
+            text-align: left;
+            border-bottom: 1px solid #eef2f7;
+            padding: 10px 8px;
+            vertical-align: top;
+            line-height: 1.7;
+        }
+        th {
+            color: #344054;
+            font-weight: 600;
+            background: #f8fafc;
+        }
+        .tip {
+            background: #f8fafc;
+            border: 1px solid #eef2f7;
+            border-left: 4px solid #2563eb;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 14px 0;
+            font-size: 14px;
+            color: #475467;
+            line-height: 1.8;
+        }
+        .warn {
+            border-left-color: #d97706;
+            background: #fffbf2;
+        }
+        .toc {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .toc a {
+            font-size: 13px;
+            color: #2563eb;
+            text-decoration: none;
+            background: #ecf5ff;
+            border-radius: 6px;
+            padding: 5px 10px;
+        }
+        .toc a:hover {
+            background: #dbeafe;
+        }
+    </style>
+</head>
+<body>
+<header class="topnav">
+    <div class="brand">码忆 CodeMem</div>
+    <nav class="nav">
+        <a class="nav-item" href="/web/">对话</a>
+        <a class="nav-item" href="/memory.html">记忆库</a>
+        <a class="nav-item" href="/instructions.html">指令</a>
+        <a class="nav-item" href="/settings.html">API Key</a>
+        <a class="nav-item active" href="/help.html">帮助</a>
+    </nav>
+</header>
+
+<main class="page">
+<div class="hero">
+    <h1>码忆 CodeMem 使用教学</h1>
+    <p>码忆是面向 Java 后端学习者的记忆型学习伴侣：它把你的 Obsidian 笔记当作只读知识库，结合对话上下文和长期记忆回答问题、指出卡点，并把值得记住的内容沉淀到记忆库。</p>
+    <div class="toc">
+        <a href="#start">快速开始</a>
+        <a href="#pages">页面导航</a>
+        <a href="#chat">对话与引用</a>
+        <a href="#memory">记忆与指令</a>
+        <a href="#knowledge">知识库与索引</a>
+        <a href="#workflow">双角色工作流</a>
+        <a href="#settings">设置说明</a>
+        <a href="#faq">常见问题</a>
+    </div>
+</div>
+
+<div class="card" id="start">
+    <h2>快速开始（5 步）</h2>
+    <ol class="steps">
+        <li>打开「对话」页，确认右上角显示 <code>后端 UP</code>；如果显示 DOWN，说明服务或数据库没启动。</li>
+        <li>进入「API Key」页，按需填写 Embedding 的 Base URL、模型与 Key。只用本地 hash 演示链路时可以不填。</li>
+        <li>回到「对话」页，在右侧「知识库」标签的「添加笔记库」里选目录并点 <b>添加并切换</b>，会自动建立索引；已经添加过的库，直接点顶部 <b>重建索引</b> 即可。</li>
+        <li>回到「对话」页，输入问题，按 <code>Ctrl + Enter</code> 或点「发送」。回答会流式输出，右侧同时出现引用来源。</li>
+        <li>右侧「引用」看本轮用到的笔记片段，「知识库」看当前生效的库、篇数与块数，也可以在卡片里单独重建某个库。</li>
+    </ol>
+    <div class="tip">索引完成后，「知识库」标签会显示当前生效库的篇数与块数。数字来自实际扫描结果，笔记增加后重建一次就会同步变化。</div>
+</div>
+
+<div class="card" id="pages">
+    <h2>页面导航</h2>
+    <table>
+        <tr><th>入口</th><th>用途</th></tr>
+        <tr><td>对话</td><td>主界面。左侧会话列表，中间对话，右侧检查器（引用 / 知识库）。</td></tr>
+        <tr><td>记忆库</td><td>长期记忆管理：对话结束后自动抽取的事实、偏好、卡点与计划，以及手动写入的条目；可按状态筛选、归档、恢复或删除。</td></tr>
+        <tr><td>指令</td><td>全局指令：自己写的固定要求，每轮回答前注入并强制遵守，可预览注入效果。</td></tr>
+        <tr><td>API Key</td><td>配置 Embedding 的 Base URL、模型与 Key，可「保存并重建索引」；知识库的添加、切换、重建与清空在对话页右侧「知识库」标签。</td></tr>
+        <tr><td>帮助</td><td>当前页面，介绍各功能的使用方法与常见问题。</td></tr>
+    </table>
+</div>
+
+<div class="card" id="chat">
+    <h2>对话与引用</h2>
+    <p>每次提问，码忆按固定顺序组装上下文：全局指令 → 本会话工作记忆 → 从笔记中检索到的片段 → 交给模型生成回答。</p>
+    <h3>你会看到什么</h3>
+    <ul>
+        <li><b>流式输出</b>：回答按 token 逐步显示，首字延迟通常在几百毫秒到几秒，取决于模型服务。</li>
+        <li><b>引用</b>：右侧「引用」列出本轮使用的笔记片段、来源路径与相关度分数。引用只来自检索结果，不会编造笔记路径。</li>
+        <li><b>检索不到时</b>：回答会明确说明知识库没有相关内容，而不是硬编一个来源。</li>
+    </ul>
+    <h3>提问建议</h3>
+    <ul>
+        <li>问笔记里有的概念时，尽量用笔记里出现过的具体术语，命中率更高。</li>
+        <li>追问可以省略主语，码忆会带上本会话的工作记忆。</li>
+    </ul>
+</div>
+
+<div class="card" id="memory">
+    <h2>记忆与指令</h2>
+    <p>码忆把「记忆」分成会话内和跨会话两层，另有一份全局指令，避免把整段对话一股脑塞给模型。</p>
+    <table>
+        <tr><th>类型</th><th>内容</th><th>在哪里</th></tr>
+        <tr><td>工作记忆</td><td>当前会话最近若干轮对话与摘要</td><td>对话页自动维护；按会话隔离。</td></tr>
+        <tr><td>长期记忆</td><td>对话结束后自动抽取的事实、偏好、卡点与计划，以及手动写入的条目</td><td>「记忆库」页：按生效中 / 已归档 / 已失效筛选，可归档、恢复或删除。</td></tr>
+        <tr><td>全局指令</td><td>自己写的固定要求，每轮回答前注入</td><td>「指令」页：新增、查看生效中的指令与注入预览。</td></tr>
+    </table>
+    <h3>长期记忆怎么更新</h3>
+    <p>一轮对话结束后，系统会把这一轮放进异步队列，抽取记忆候选；它不会阻塞回答，通常在几秒内出现在「记忆库」里。手动写入的条目立即生效。</p>
+    <h3>右侧标签</h3>
+    <ul>
+        <li><b>引用</b>：本轮用到的笔记片段、路径与相关度分数。</li>
+        <li><b>知识库</b>：管理知识源，添加、切换或移除笔记库，分别重建索引或清空知识库。</li>
+    </ul>
+    <div class="tip">删掉某条记忆是不可恢复的物理删除；只想让它不再影响回答，用「归档」就够，归档后还能点「恢复」。</div>
+</div>
+
+<div class="card" id="knowledge">
+    <h2>知识库与索引</h2>
+    <p>码忆把笔记目录当作 <b>只读</b> 知识源：扫描、切分、建索引，全程不会修改或删除原文件。</p>
+    <h3>「知识库」标签上的按钮</h3>
+    <table>
+        <tr><th>位置</th><th>按钮</th><th>作用</th></tr>
+        <tr><td>顶部工具条</td><td>重建索引</td><td>重建下面<b>所有</b>已登记知识源的索引，并汇总每个源扫描、成功、跳过的篇数。</td></tr>
+        <tr><td>顶部工具条</td><td>清空索引</td><td>清空索引<b>并移除已登记的知识源</b>，知识库回到未配置的空状态；笔记文件不受影响，清空后重启也不会自动回填。</td></tr>
+        <tr><td>顶部工具条</td><td>刷新来源</td><td>重新读取知识源列表，不触发扫描。</td></tr>
+        <tr><td>知识源卡片</td><td>重建索引</td><td>只重建<b>这一个</b>知识源的索引，其他源不动。</td></tr>
+        <tr><td>知识源卡片</td><td>切换到此库</td><td>把该库设为生效库并重建它的索引；其他源索引保留，但不参与检索。</td></tr>
+        <tr><td>知识源卡片</td><td>移除</td><td>只是取消登记，不删除磁盘笔记；使用中的库需要先切换后才能移除。</td></tr>
+    </table>
+    <h3>添加笔记库</h3>
+    <p>在「添加笔记库」里填名称（可留空，默认取目录名）、选择类型（Obsidian 笔记库或普通 Markdown / TXT 目录）、填目录绝对路径或点「选择目录…」调系统窗口，最后点「添加并切换」。添加后会自动成为生效库并建立索引。</p>
+    <h3>同一时间只有一个生效库</h3>
+    <p>可以登记多个笔记库，但检索只使用当前生效的那一个。切换生效库时会重建它的索引；其他库的索引保留着，切回去不需要重新扫描。</p>
+    <h3>索引过程</h3>
+    <ul>
+        <li>按 Markdown 标题层级切块，保留标题路径、双链和 frontmatter 元数据。</li>
+        <li>用内容哈希做增量：没变的笔记直接跳过，只有改动或新增的才重新向量化。</li>
+        <li>检索时同时走两条路：向量相似度 + 中文关键词匹配，再用融合排序取前几条。</li>
+    </ul>
+    <div class="tip warn">更换 embedding 服务地址、模型或维度后，向量签名会变化，必须重建索引，否则旧向量和新模型不匹配，检索会不准。</div>
+</div>
+
+<div class="card" id="workflow">
+    <h2>双角色工作流</h2>
+    <p>不是所有问题都值得两个角色。码忆先用规则路由判断，再决定是否启用审查。</p>
+    <ul>
+        <li><b>什么时候触发</b>：学习计划、卡点诊断、代码评审、跨会话追问，或你明确要求严格审查；概念解释、事实问答走单角色，延迟低。</li>
+        <li><b>怎么分工</b>：Mentor 先起草；Reviewer 只基于证据（引用片段、笔记、记忆）指出缺证据、与证据冲突或代码错误，不重写答案，也不引入新事实。</li>
+        <li><b>怎么修订</b>：挑出问题时 Mentor 最多修订一次；仍不通过会标注未解决问题并附证据，不会无限循环。</li>
+        <li><b>在哪看</b>：双角色在后台完成，界面上不单独展示时间线；触发时回答会稍慢一些。</li>
+    </ul>
+    <div class="tip">双角色会多 1–2 次模型调用，因此更慢；日常概念问题不会触发。</div>
+</div>
+
+<div class="card" id="settings">
+    <h2>API Key 与知识库设置</h2>
+    <h3>知识库（对话页右侧「知识库」标签）</h3>
+    <ul>
+        <li><b>当前使用</b>：显示生效的库、路径和索引规模；只读扫描，不改原笔记。</li>
+        <li><b>添加笔记库</b>：填名称（可留空）、选择类型、填目录绝对路径，点「添加并切换」。</li>
+        <li><b>重建索引（顶部）</b>：重建下面所有已登记知识源，完成后汇总每个源的结果。</li>
+        <li><b>重建索引（卡片）</b>：只重建该知识源。</li>
+        <li><b>清空索引</b>：删除全部索引并移除知识源登记，知识库回到未配置状态；笔记文件不动。</li>
+    </ul>
+    <h3>API Key 页</h3>
+    <ul>
+        <li>Key 只保存在服务进程内存里，<b>不写文件、不写数据库、不回显、不写日志</b>。</li>
+        <li>因此服务重启后需要重新输入；想长期生效，就在启动前设置环境变量 <code>CODEMEM_EMBEDDING_API_KEY</code>（或 <code>OPENAI_API_KEY</code>）。</li>
+        <li>更换服务商要同时改 Base URL 和模型名，保存后重建索引。</li>
+        <li>「保存并重建索引」适合第一次配置或换模型：一步完成保存并重建全部知识源。</li>
+    </ul>
+    <div class="tip">重建后如果提示「扫描 N 篇，失败 N 篇」，最常见原因是 Key 未配置或 Base URL 不通。按提示到 API Key 页检查后重试即可。</div>
+</div>
+
+<div class="card" id="faq">
+    <h2>常见问题</h2>
+    <h3>重建索引显示扫描 27 篇、成功 0 篇、跳过 27 篇？</h3>
+    <p>说明笔记内容没有变化，全部命中哈希、无需重新向量化，属于正常结果；篇数和块数仍以前一次索引为准。想强制重算，可以先清空索引再重建。</p>
+    <h3>知识库是空的、0 篇 / 0 块？</h3>
+    <p>要么还没添加笔记库，要么点过「清空索引」（会连同知识源一起移除）。在「添加笔记库」里填目录重新添加即可；清空后重启不会自动回填。</p>
+    <h3>重建索引提示失败？</h3>
+    <p>先看提示里的失败原因。若是「embedding API key is not configured」，说明 Key 没填或服务重启后丢失；填好 Key 再点重建，不需要重启服务。若扫描数也是 0，检查知识源路径是否存在、目录里是否有 <code>.md</code> 或 <code>.txt</code> 文件。</p>
+    <h3>服务重启后 Key 又没了？</h3>
+    <p>这是设计行为：Key 只存内存。把 Key 放进环境变量再启动，或用「保存并重建索引」重新配置一次。</p>
+    <h3>中文提问返回的结果不相关？</h3>
+    <p>确认索引用的是真实 embedding 而不是本地 hash。hash 只适合无 Key 时演示链路，语义召回很弱；换回真实服务后重建索引即可。</p>
+    <h3>记忆没有立刻出现在记忆库？</h3>
+    <p>抽取是异步的，通常在几秒内完成，刷新「记忆库」页即可看到；手动写入的条目会立即生效。</p>
+    <h3>删除会话会删掉什么？</h3>
+    <p>会级联清理该会话的消息、轮次、抽取记录、Agent 轨迹、异步事件和工作记忆；不会删除笔记，也不会删除长期记忆与全局指令。</p>
+    <h3>服务地址是什么？</h3>
+    <p>默认 <code>http://127.0.0.1:8080</code>，主界面在 <code>/web/</code>。健康检查用 <code>/actuator/health</code>。</p>
+</div>
+
+<div class="card">
+    <h2>数据与安全</h2>
+    <ul>
+        <li>笔记目录只读，索引不会写回 Obsidian。</li>
+        <li>「清空索引」只删除索引与知识源登记，不删除磁盘上的笔记。</li>
+        <li>API Key 只在运行时内存中，不落盘、不回显。</li>
+        <li>笔记内容在提示词中只作为资料，不执行其中的指令。</li>
+    </ul>
+    <div class="tip">想了解实现细节，可查看源码里的 <code>knowledge</code>、<code>chat</code>、<code>memory</code> 这几个包。</div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>码忆 · 记忆库</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+        body { margin: 0; background: #f5f7fa; }
+        .topnav {
+            display: flex; align-items: center; gap: 12px; height: 52px; padding: 0 16px;
+            background: #fff; border-bottom: 1px solid #e4e7ed;
+        }
+        .brand { font-weight: 700; font-size: 16px; color: #2b6cb0; }
+        .nav { display: flex; align-items: center; gap: 4px; }
+        .nav-item {
+            padding: 6px 14px; border-radius: 8px; font-size: 14px; color: #4b5563;
+            text-decoration: none; line-height: 20px; transition: background .15s, color .15s;
+        }
+        .nav-item:hover { background: #f0f6ff; color: #2563eb; }
+        .nav-item.active { background: #ecf5ff; color: #2563eb; font-weight: 600; }
+        .page { max-width: 960px; margin: 32px auto 64px; padding: 0 20px; }
+        .card {
+            background: #fff; border: 1px solid #e3e9f2; border-radius: 14px; padding: 26px;
+            box-shadow: 0 8px 24px rgba(23, 32, 51, .06);
+        }
+        h1 { margin: 0 0 8px; font-size: 24px; }
+        h2 { margin: 22px 0 10px; font-size: 16px; color: #344054; }
+        .sub { color: #667085; margin: 0 0 18px; line-height: 1.7; font-size: 14px; }
+        .stats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+        .stat {
+            flex: 1 1 120px; background: #f8fafc; border: 1px solid #eef2f7;
+            border-radius: 10px; padding: 12px 14px;
+        }
+        .stat b { display: block; font-size: 20px; color: #1d2939; }
+        .stat span { font-size: 12px; color: #667085; }
+        .filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 16px; }
+        label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #344054; }
+        input, textarea, select {
+            box-sizing: border-box; padding: 9px 12px; border: 1px solid #cfd8e3; border-radius: 9px;
+            font-size: 14px; outline: none; background: #fff; color: #172033; font-family: inherit;
+        }
+        textarea { width: 100%; resize: vertical; min-height: 64px; line-height: 1.6; }
+        input:focus, textarea:focus, select:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, .12); }
+        .field { flex: 1 1 150px; }
+        .field input { width: 100%; }
+        button {
+            border: 0; border-radius: 9px; padding: 9px 16px; font-size: 14px; cursor: pointer;
+            background: #2563eb; color: #fff;
+        }
+        button.secondary { background: #e8eef8; color: #1d4ed8; }
+        button.danger { background: #fee4e2; color: #b42318; }
+        button.ghost { background: transparent; color: #2563eb; padding: 4px 8px; font-size: 13px; }
+        button:disabled { opacity: .55; cursor: not-allowed; }
+        .status { margin-top: 6px; min-height: 20px; font-size: 13px; line-height: 1.6; }
+        .ok { color: #067647; } .warn { color: #b54708; } .err { color: #b42318; }
+        .item {
+            border: 1px solid #e3e9f2; border-radius: 12px; padding: 14px 16px; background: #fcfdff;
+            margin-bottom: 12px;
+        }
+        .item.archived, .item.superseded { background: #fafafa; }
+        .item-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+        .tag { font-size: 12px; padding: 1px 8px; border-radius: 999px; background: #e8eef8; color: #1d4ed8; }
+        .tag.active { background: #dcfae6; color: #067647; }
+        .tag.archived { background: #eef2f7; color: #475467; }
+        .tag.superseded { background: #fef0c7; color: #b54708; }
+        .content { font-size: 15px; line-height: 1.7; white-space: pre-wrap; word-break: break-word; color: #1d2939; }
+        .meta { margin-top: 8px; font-size: 12px; color: #667085; line-height: 1.7; }
+        .actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .actions button { padding: 6px 12px; font-size: 13px; }
+        .empty {
+            border: 1px dashed #d0d8e4; border-radius: 12px; padding: 30px 20px; text-align: center;
+            color: #667085; line-height: 1.8; font-size: 14px;
+        }
+        .empty b { display: block; color: #344054; margin-bottom: 6px; font-size: 15px; }
+        .note { margin-top: 14px; color: #667085; font-size: 13px; line-height: 1.7; }
+    </style>
+</head>
+<body>
+<header class="topnav">
+    <div class="brand">码忆 CodeMem</div>
+    <nav class="nav">
+        <a class="nav-item" href="/web/">对话</a>
+        <a class="nav-item active" href="/memory.html">记忆库</a>
+        <a class="nav-item" href="/instructions.html">指令</a>
+        <a class="nav-item" href="/settings.html">API Key</a>
+        <a class="nav-item" href="/help.html">帮助</a>
+    </nav>
+</header>
+
+<main class="page">
+    <div class="card">
+        <h1>记忆库</h1>
+        <p class="sub">
+            这里管理长期记忆：对话结束后自动抽取的事实、偏好、卡点与计划，以及你手动写入的条目。
+            生效中的记忆会参与后续对话召回；归档和失效的记忆保留下来但不再影响回答，归档后还可以恢复。
+            全局指令不在这里，去「指令」页维护。
+        </p>
+
+        <div class="stats">
+            <div class="stat"><b id="statActive">-</b><span>生效中</span></div>
+            <div class="stat"><b id="statArchived">-</b><span>已归档</span></div>
+            <div class="stat"><b id="statSuperseded">-</b><span>已失效</span></div>
+        </div>
+
+        <div class="filters">
+            <div class="field">
+                <label for="statusFilter">状态</label>
+                <select id="statusFilter">
+                    <option value="ALL">全部</option>
+                    <option value="ACTIVE" selected>生效中</option>
+                    <option value="ARCHIVED">已归档</option>
+                    <option value="SUPERSEDED">已失效</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="keyword">关键词</label>
+                <input id="keyword" type="text" autocomplete="off" spellcheck="false" placeholder="按关键词过滤">
+            </div>
+            <div>
+                <button id="refreshBtn" type="button" class="secondary">刷新</button>
+            </div>
+        </div>
+
+        <h2>写入记忆</h2>
+        <textarea id="newContent" rows="3" maxlength="500" placeholder="写下你想让码忆长期记住的内容"></textarea>
+        <div class="filters" style="margin-top: 10px">
+            <div class="field">
+                <label for="newType">类型</label>
+                <select id="newType">
+                    <option value="">自动推断</option>
+                    <option value="FACT">事实</option>
+                    <option value="WEAKNESS">卡点</option>
+                    <option value="PLAN">计划</option>
+                    <option value="MASTERY">已掌握</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="newTopic">主题（可选）</label>
+                <input id="newTopic" type="text" autocomplete="off" placeholder="主题（可选）">
+            </div>
+            <div class="field">
+                <label for="newImportance">重要度 <span id="newImportanceValue">0.80</span></label>
+                <input id="newImportance" type="range" min="0" max="1" step="0.05" value="0.8">
+            </div>
+            <div><button id="createBtn" type="button">写入</button></div>
+        </div>
+        <div id="status" class="status"></div>
+
+        <h2>记忆列表</h2>
+        <div id="list" class="list"></div>
+
+        <p class="note">删除是不可恢复的物理删除；只想让它不再影响回答，用「归档」就够，归档后还能点「恢复」。</p>
+    </div>
+</main>
+
+<script>
+    const listEl = document.getElementById('list');
+    const statusEl = document.getElementById('status');
+    const statusFilter = document.getElementById('statusFilter');
+    const keywordInput = document.getElementById('keyword');
+    const newContent = document.getElementById('newContent');
+    const newType = document.getElementById('newType');
+    const newTopic = document.getElementById('newTopic');
+    const newImportance = document.getElementById('newImportance');
+    const newImportanceValue = document.getElementById('newImportanceValue');
+
+    const API = '/api/v1/memory/items';
+    let allItems = [];
+
+    function setStatus(text, kind) {
+        statusEl.textContent = text || '';
+        statusEl.className = 'status ' + (kind || '');
+    }
+
+    function partition() {
+        return {
+            learnerId: 'wf-user',
+            projectId: 'java-backend'
+        };
+    }
+
+    function q() {
+        const p = partition();
+        return `learnerId=${encodeURIComponent(p.learnerId)}&projectId=${encodeURIComponent(p.projectId)}`;
+    }
+
+    function statusLabel(status) {
+        if (status === 'ACTIVE') return '生效中';
+        if (status === 'ARCHIVED') return '已归档';
+        if (status === 'SUPERSEDED') return '已失效';
+        return status || '-';
+    }
+
+    function typeLabel(type) {
+        const map = {
+            GOAL: '目标', PREFERENCE: '偏好', BLOCKER: '卡点', WEAKNESS: '卡点',
+            MASTERY: '已掌握', DECISION: '决定', FACT: '事实', PLAN: '计划', CORRECTION: '纠错'
+        };
+        return map[type] || type || '记忆';
+    }
+
+    function sourceLabel(source) {
+        if (source === 'EXTRACTION') return '自动抽取';
+        if (source === 'MANUAL') return '手动写入';
+        return source || '-';
+    }
+
+    async function load() {
+        setStatus('加载中…', 'warn');
+        try {
+            const response = await fetch(`${API}?${q()}&status=ALL&limit=200`);
+            if (!response.ok) {
+                setStatus('读取失败：HTTP ' + response.status, 'err');
+                return;
+            }
+            allItems = await response.json();
+            updateStats();
+            render();
+            setStatus(allItems.length ? `共 ${allItems.length} 条记忆` : '还没有记忆，写一条或先聊几轮', 'ok');
+        } catch (error) {
+            setStatus('加载失败：' + error.message, 'err');
+        }
+    }
+
+    function updateStats() {
+        const count = status => allItems.filter(item => item.status === status).length;
+        document.getElementById('statActive').textContent = count('ACTIVE');
+        document.getElementById('statArchived').textContent = count('ARCHIVED');
+        document.getElementById('statSuperseded').textContent = count('SUPERSEDED');
+    }
+
+    function visibleItems() {
+        const keyword = keywordInput.value.trim().toLowerCase();
+        const status = statusFilter.value;
+        return allItems.filter(item => {
+            if (status !== 'ALL' && item.status !== status) return false;
+            if (!keyword) return true;
+            return (item.content || '').toLowerCase().includes(keyword)
+                || (item.topic || '').toLowerCase().includes(keyword);
+        });
+    }
+
+    function render() {
+        listEl.innerHTML = '';
+        const items = visibleItems();
+        if (!items.length) {
+            const empty = document.createElement('div');
+            empty.className = 'empty';
+            empty.innerHTML = '<b>当前筛选下没有记忆</b>换个状态或关键词试试。';
+            listEl.appendChild(empty);
+            return;
+        }
+        items.forEach(item => listEl.appendChild(card(item)));
+    }
+
+    function card(item) {
+        const wrap = document.createElement('div');
+        wrap.className = 'item ' + String(item.status || '').toLowerCase();
+
+        const head = document.createElement('div');
+        head.className = 'item-head';
+        const typeTag = document.createElement('span');
+        typeTag.className = 'tag';
+        typeTag.textContent = typeLabel(item.type);
+        head.appendChild(typeTag);
+        const sourceTag = document.createElement('span');
+        sourceTag.className = 'tag';
+        sourceTag.textContent = sourceLabel(item.sourceType);
+        head.appendChild(sourceTag);
+        const statusTag = document.createElement('span');
+        statusTag.className = 'tag ' + String(item.status || '').toLowerCase();
+        statusTag.textContent = statusLabel(item.status);
+        head.appendChild(statusTag);
+        wrap.appendChild(head);
+
+        const content = document.createElement('div');
+        content.className = 'content';
+        content.textContent = item.content;
+        wrap.appendChild(content);
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.textContent = 'topic ' + (item.topic || '—')
+            + ' · 重要 ' + Number(item.importance || 0).toFixed(2)
+            + ' · 置信 ' + Number(item.confidence || 0).toFixed(2)
+            + ' · 冷热 ' + Number(item.score || 0).toFixed(3);
+        wrap.appendChild(meta);
+
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+        if (item.status === 'ACTIVE') {
+            actions.appendChild(button('归档', 'secondary', () => archive(item)));
+        }
+        if (item.status === 'ARCHIVED') {
+            actions.appendChild(button('恢复', 'secondary', () => restore(item)));
+        }
+        actions.appendChild(button('删除', 'danger', () => removeItem(item)));
+        wrap.appendChild(actions);
+        return wrap;
+    }
+
+    function button(text, kind, handler) {
+        const el = document.createElement('button');
+        el.type = 'button';
+        el.className = kind;
+        el.textContent = text;
+        el.addEventListener('click', handler);
+        return el;
+    }
+
+    async function archive(item) {
+        try {
+            const response = await fetch(`${API}/${item.id}/archive?${q()}`, {method: 'POST'});
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.archived) {
+                setStatus('归档失败：' + (data.reason || 'HTTP ' + response.status), 'err');
+                return;
+            }
+            setStatus('已归档，可在「已归档」中查看或恢复。', 'ok');
+            await load();
+        } catch (error) {
+            setStatus('归档失败：' + error.message, 'err');
+        }
+    }
+
+    async function restore(item) {
+        try {
+            const response = await fetch(`${API}/${item.id}/restore?${q()}`, {method: 'POST'});
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.restored) {
+                setStatus('恢复失败：' + (data.reason || 'HTTP ' + response.status), 'err');
+                return;
+            }
+            setStatus('已恢复，该记忆重新参与召回。', 'ok');
+            await load();
+        } catch (error) {
+            setStatus('恢复失败：' + error.message, 'err');
+        }
+    }
+
+    async function removeItem(item) {
+        if (!confirm('删除这条记忆？\n\n' + String(item.content).slice(0, 80) + '\n\n删除后无法恢复。')) {
+            return;
+        }
+        try {
+            const response = await fetch(`${API}/${item.id}?${q()}`, {method: 'DELETE'});
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                setStatus('删除失败：' + (data.reason || 'HTTP ' + response.status), 'err');
+                return;
+            }
+            setStatus('已删除。', 'ok');
+            await load();
+        } catch (error) {
+            setStatus('删除失败：' + error.message, 'err');
+        }
+    }
+
+    async function createMemory() {
+        const content = newContent.value.trim();
+        if (content.length < 3) {
+            setStatus('记忆内容至少 3 个字符。', 'err');
+            newContent.focus();
+            return;
+        }
+        try {
+            const response = await fetch(`${API}?${q()}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json; charset=utf-8'},
+                body: JSON.stringify({
+                    content,
+                    type: newType.value || null,
+                    topic: newTopic.value.trim() || null,
+                    importance: Number(newImportance.value)
+                })
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.created) {
+                setStatus('写入失败：' + (data.reason || 'HTTP ' + response.status), 'err');
+                return;
+            }
+            setStatus('已写入长期记忆。', 'ok');
+            newContent.value = '';
+            newType.value = '';
+            newTopic.value = '';
+            newImportance.value = '0.8';
+            newImportanceValue.textContent = '0.80';
+            statusFilter.value = 'ACTIVE';
+            await load();
+        } catch (error) {
+            setStatus('写入失败：' + error.message, 'err');
+        }
+    }
+
+    document.getElementById('createBtn').addEventListener('click', createMemory);
+    document.getElementById('refreshBtn').addEventListener('click', load);
+    statusFilter.addEventListener('change', render);
+    keywordInput.addEventListener('input', render);
+    newImportance.addEventListener('input', () => {
+        newImportanceValue.textContent = Number(newImportance.value).toFixed(2);
+    });
+
+    load().catch(error => setStatus('初始化失败：' + error.message, 'err'));
+</script>
+</body>
+</html>

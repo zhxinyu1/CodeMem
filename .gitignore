@@ -1,0 +1,50 @@
+# ===== 构建产物 =====
+target/
+out/
+build/
+*.class
+
+# ===== 前端依赖与打包产物 =====
+# 前端源码在 web/ 下；node_modules 与 dist 都能用 npm 重建，不提交
+web/node_modules/
+web/dist/
+web/.vite/
+npm-debug.log*
+yarn-error.log*
+
+# 注意：src/main/resources/static/web 是后端 /web/ 实际托管的前端产物，
+# 关系到“只拿 jar 也能跑”，默认保留提交，不要加进来。
+
+# ===== 本地配置与密钥 =====
+# 真实 Key 只放本地 .env 或环境变量；.env.example 是占位模板，必须保留
+.env
+.env.*
+!.env.example
+*.local
+
+# ===== 日志与临时文件 =====
+logs/
+*.log
+.dumate/
+tmp/
+temp/
+
+# ===== IDE 与系统文件 =====
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.DS_Store
+Thumbs.db
+
+# ===== 数据库/索引落盘文件（如有） =====
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# ===== 内部文档（不随仓库发布） =====
+# 架构方案、评测资料与开发过程记录只在本地保留
+docs/
+HANDOFF.md
